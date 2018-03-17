@@ -68,6 +68,16 @@ void draw() {
   popMatrix();
 }
 
+float orient2d(Vector a, Vector b, Vector c) {
+  return ((frame.coordinatesOf(b).x() - frame.coordinatesOf(a).x()) *  (frame.coordinatesOf(c).y() - frame.coordinatesOf(a).y())) -
+    ((frame.coordinatesOf(b).y() - frame.coordinatesOf(a).y()) *  (frame.coordinatesOf(c).x() - frame.coordinatesOf(a).x()));
+}
+
+float orient2d2(Vector a, Vector b, Vector c) {
+  return ((frame.coordinatesOf(b).x() - frame.coordinatesOf(a).x()) *  (c.y() - frame.coordinatesOf(a).y())) -
+    ((frame.coordinatesOf(b).y() - frame.coordinatesOf(a).y()) *  (c.x() - frame.coordinatesOf(a).x()));
+}
+
 // Implement this function to rasterize the triangle.
 // Coordinates are given in the frame system which has a dimension of 2^n
 void triangleRaster() {
@@ -76,9 +86,42 @@ void triangleRaster() {
   if (debug) {
     pushStyle();
     stroke(255, 255, 0, 125);
+    stroke(#FF0000);
     point(round(frame.coordinatesOf(v1).x()), round(frame.coordinatesOf(v1).y()));
+    stroke(#00FF00);
+    point(round(frame.coordinatesOf(v2).x()), round(frame.coordinatesOf(v2).y()));
+    stroke(#0000FF);
+    point(round(frame.coordinatesOf(v3).x()), round(frame.coordinatesOf(v3).y()));
     popStyle();
   }
+  int maxX = round(max(frame.coordinatesOf(v1).x(), frame.coordinatesOf(v2).x(), frame.coordinatesOf(v3).x()));
+  int maxY = round(max(frame.coordinatesOf(v1).y(), frame.coordinatesOf(v2).y(), frame.coordinatesOf(v3).y()));
+  int minX = round(min(frame.coordinatesOf(v1).x(), frame.coordinatesOf(v2).x(), frame.coordinatesOf(v3).x()));
+  int minY = round(min(frame.coordinatesOf(v1).y(), frame.coordinatesOf(v2).y(), frame.coordinatesOf(v3).y()));
+  strokeWeight(0);
+  if (orient2d(v1, v2, v3)<0)
+  {
+    Vector tmp = v1;
+    v1 = v2;
+    v2 = tmp;
+  }
+  for (int x = minX; x<=maxX; x++)
+    for (int y = minY; y<=maxY; y++) {
+      int count = 0;
+      for (float i = 0; i<1; i+=(float)1/4)
+        for (float j = 0; j<1; j+=(float)1/4) {
+          Vector p = new Vector(x+i+1/8, y+i+1/8);
+          float w1 = orient2d2(v1, v2, p);
+          float w2 = orient2d2(v2, v3, p);
+          float w3 = orient2d2(v3, v1, p);
+          if (w1 >= 0 && w2>=0 && w3>=0)
+            count++;
+        }
+      float c = ((float)count/16)*255;
+      fill(c);
+      Vector p = new Vector(x, y);
+      rect(p.x(), p.y(), 1, 1);
+    }
 }
 
 void randomizeTriangle() {
