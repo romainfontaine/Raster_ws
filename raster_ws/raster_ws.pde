@@ -105,20 +105,25 @@ void triangleRaster() {
     v1 = v2;
     v2 = tmp;
   }
+
+  int antialiasing_subdiv = 4;
+
   for (int x = minX; x<=maxX; x++)
     for (int y = minY; y<=maxY; y++) {
-      int count = 0;
-      for (float i = 0; i<1; i+=(float)1/4)
-        for (float j = 0; j<1; j+=(float)1/4) {
-          Vector p = new Vector(x+i+1/8, y+i+1/8);
+      float avgCols[] = {0, 0, 0};
+      for (float i = 0; i<1; i+=(float)1/antialiasing_subdiv)
+        for (float j = 0; j<1; j+=(float)1/antialiasing_subdiv) {
+          Vector p = new Vector(x+i+1/antialiasing_subdiv/2, y+i+1/antialiasing_subdiv/2);
           float w1 = orient2d2(v1, v2, p);
           float w2 = orient2d2(v2, v3, p);
           float w3 = orient2d2(v3, v1, p);
-          if (w1 >= 0 && w2>=0 && w3>=0)
-            count++;
+          if (w1 >= 0 && w2>=0 && w3>=0) {
+            avgCols[0]+=w1*255/(w1+w2+w3)/(antialiasing_subdiv*antialiasing_subdiv);
+            avgCols[1]+=w2*255/(w1+w2+w3)/(antialiasing_subdiv*antialiasing_subdiv);
+            avgCols[2]+=w3*255/(w1+w2+w3)/(antialiasing_subdiv*antialiasing_subdiv);
+          }
         }
-      float c = ((float)count/16)*255;
-      fill(c);
+      fill(color(round(avgCols[0]), round(avgCols[1]), round(avgCols[2])));
       Vector p = new Vector(x, y);
       rect(p.x(), p.y(), 1, 1);
     }
