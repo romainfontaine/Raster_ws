@@ -29,8 +29,13 @@ Complete la tabla:
 ## Discusión
 
 Describa los resultados obtenidos. Qué técnicas de anti-aliasing y shading se exploraron? Adjunte las referencias. Discuta las dificultades encontradas.
+- Resultados obtenidos:
+![Sin antialiasing](antialiasing_1.png "Sin antialiasing")
+![Con antialiasing](antialiasing_64.png "Con antialiasing")
+
+
 - Anti-alisasing:
-  - Tecnica vista en clase: subdividir cada pixel en 16 zonas. La intensidad del color es proporcional al numero de zonas que pertenecen al triangulo.
+  - Tecnica vista en clase - Subsampling: subdividir cada pixel en 16 zonas. La intensidad del color es proporcional al numero de zonas que pertenecen al triangulo.
 
 - Shading:
   - Interpolación con las coordenadas baricentricas: cada nodo del triangulo tiene un color inicial. Los puntos dentro del triangulo tienen una proporcion de cada color dado su distancia a cada nodo.
