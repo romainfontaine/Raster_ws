@@ -30,8 +30,8 @@ Complete la tabla:
 
 Describa los resultados obtenidos. Qué técnicas de anti-aliasing y shading se exploraron? Adjunte las referencias. Discuta las dificultades encontradas.
 - Resultados obtenidos:
-![Sin antialiasing](antialiasing_1.png "Sin antialiasing")
-![Con antialiasing](antialiasing_64.png "Con antialiasing")
+  - ![Sin antialiasing](antialiasing_1.png "Sin antialiasing")
+  - ![Con antialiasing](antialiasing_64.png "Con antialiasing")
 
 
 - Anti-alisasing:
